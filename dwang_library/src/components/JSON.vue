@@ -110,12 +110,33 @@
     <section class="lab-section">
       <h2>Attribute, Class and Style Binding with <code>v-bind</code></h2>
       <p>Highlighting Specific Authors:</p>
+
+      <h3 :style="{color: orwellNameColorOfText, fontSize: orwellNameFontSize}">
+        {{ orwell.name }}
+      </h3>
+      <p :class="successfullClass">
+        The Year of Birth: {{ orwell.birthYear }}
+      </p>
+      <p> Works:
+        <ul>
+        <li v-for="work in orwell.famousWorks" :key = work>
+          {{ work.title }} {{ work.year }}          
+        </li>
+      </ul>
+      </p>
+      
+
+
     </section>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+
+const orwellNameColorOfText = ref("blue")
+const orwellNameFontSize = ref(22)
+const successfullClass = ref("Succesfull")
 
 // Activity 1: Import JSON files (authors.json and bookstores.json)
 // TODO: CODE TO IMPORT JSON FILES HERE
