@@ -36,7 +36,11 @@
         <button class="btn btn-success" type="submit">Search</button>
       </form>
 
-      <div class="col-md-3 text-end d-flex justify-content-end">
+      <div v-if="isLogIN" class="col-md-3 text-end">
+        <a href="#" class="btn btn-outline-primary" @click="handleLogout">Log out</a>
+      </div>
+
+      <div v-else class="col-md-3 text-end d-flex justify-content-end">
         <router-link to="/Authorise/login" class="btn btn-outline-primary me-2" aria-current="page"
           >Login</router-link
         >
@@ -48,6 +52,35 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const isLogIN = ref(false)
+let auth
+onMounted(() => {
+  auth = getAuth()
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isLogIN.value = true
+    } else {
+      isLogIN.value = false
+    }
+  })
+})
+
+const handleLogout = () => {
+  console.log('logout')
+  signOut(auth)
+    .then(() => {
+      router.push('/')
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+</script>
 
 <style scoped></style>
