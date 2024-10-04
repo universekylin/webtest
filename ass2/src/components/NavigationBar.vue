@@ -29,6 +29,12 @@
             >Volunteer</router-link
           >
         </li>
+
+        <li class="nav-item">
+          <router-link to="/Authorise/feedback" class="nav-link active" aria-current="page"
+            >Feedback</router-link
+          >
+        </li>
       </ul>
 
       <form class="d-flex">

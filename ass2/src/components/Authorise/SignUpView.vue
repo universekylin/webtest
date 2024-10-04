@@ -130,13 +130,13 @@ const SignUp = () => {
       SignUpFormData.value.password
     )
       .then((userCredential) => {
-        console.log('Succesfully registered')
+        console.log('Successfully registered')
         console.log(userCredential)
         router.push('/')
       })
       .catch((error) => {
         const errorCode = error.code
-        const errorMessage = error.errorMessage
+        const errorMessage = error.message
         console.log(errorCode, errorMessage)
       })
   }
