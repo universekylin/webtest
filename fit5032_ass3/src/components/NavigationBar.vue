@@ -25,8 +25,8 @@
           >
         </li>
         <li class="nav-item">
-          <router-link to="/Storynav/our-volunteer" class="nav-link active" aria-current="page"
-            >Volunteer</router-link
+          <router-link to="/Storynav/our-booking" class="nav-link active" aria-current="page"
+            >Booking</router-link
           >
         </li>
 

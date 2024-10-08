@@ -2,11 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './components/HomeView.vue'
 import AboutUs from './components/Storynav/AboutUs.vue'
 import OurService from './components/Storynav/OurService.vue'
-import TheVolunteer from './components/Storynav/TheVolunteer.vue'
 import LoginView from './components/Authorise/LoginView.vue'
 import SignUpView from './components/Authorise/SignUpView.vue'
 import FeedbackView from './components/Authorise/feedbackView.vue'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import TheBooking from './components/Storynav/TheBooking.vue'
 
 const routes = [
   {
@@ -25,9 +25,9 @@ const routes = [
     component: OurService
   },
   {
-    path: '/Storynav/our-volunteer',
-    name: 'our-volunteer',
-    component: TheVolunteer
+    path: '/Storynav/our-booking',
+    name: 'our-booking',
+    component: TheBooking
   },
   {
     path: '/Authorise/login',

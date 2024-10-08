@@ -2,6 +2,10 @@ ru
 <script setup>
 import NavigationBar from './components/NavigationBar.vue'
 import TheFooter from './TheFooter.vue'
+import { ref, provide } from 'vue'
+const bookings = ref([])
+
+provide('bookings', bookings)
 </script>
 
 <template>

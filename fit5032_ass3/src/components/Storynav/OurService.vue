@@ -75,6 +75,13 @@
     </ul>
   </div>
 
+  <!-- Export Buttons -->
+  <button @click="exportToPDF" class="btn btn-primary">Export to PDF</button>
+  <button @click="exportToCSV" class="btn btn-secondary">Export to CSV</button>
+  <button @click="exportToExcel" class="btn btn-success">Export to Excel</button>
+
+  <br /><br />
+
   <datatable :data="services" :columns="columns" :options="options" class="display" ref="dt_table">
     <thead>
       <tr>
@@ -100,6 +107,10 @@
 </template>
 
 <script setup>
+/* global google */ // 声明 google 为全局变量，解决 ESLint 报错
+
+// Import XLSX for Excel
+import * as XLSX from 'xlsx'
 import { ref, onMounted } from 'vue'
 // firebase
 import { database } from '@/components/firebase/firebaseIndex.js'
@@ -109,6 +120,10 @@ import DataTable from 'datatables.net-vue3'
 import DataTablesCore from 'datatables.net-bs5'
 // google map
 import { GoogleMap, Marker, InfoWindow } from 'vue3-google-map'
+// Import jsPDF library for exporting PDF
+import jsPDF from 'jspdf'
+// Import FileSaver for Excel and CSV export
+import { saveAs } from 'file-saver'
 
 const services = ref([])
 const serviceMarkers = ref([])
@@ -239,28 +254,86 @@ const searchColumn = (columnIndex, event) => {
 }
 
 const center = { lat: -37.913003, lng: 145.133822 }
+
+// Export table data to PDF using jsPDF
+const exportToPDF = () => {
+  const doc = new jsPDF()
+  let yOffset = 10
+
+  // Add Title to PDF
+  doc.setFontSize(18)
+  doc.text('Service Data', 10, yOffset)
+  yOffset += 10
+
+  // Add Table Headers
+  doc.setFontSize(12)
+  doc.text('Name', 10, yOffset)
+  doc.text('Address', 60, yOffset)
+  doc.text('Contact', 150, yOffset)
+  yOffset += 10
+
+  // Add Table Data
+  services.value.forEach((service) => {
+    doc.text(service.name, 10, yOffset)
+    doc.text(service.address, 60, yOffset)
+    doc.text(service.contact, 150, yOffset)
+    yOffset += 10
+  })
+
+  // Save the generated PDF
+  doc.save('service-data.pdf')
+}
+
+// Export table data to CSV
+const exportToCSV = () => {
+  const csvContent = [
+    ['Name', 'Address', 'Contact'],
+    ...services.value.map((service) => [service.name, service.address, service.contact])
+  ]
+    .map((e) => e.join(','))
+    .join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  saveAs(blob, 'service-data.csv')
+}
+
+// Export table data to Excel
+const exportToExcel = () => {
+  const worksheet = XLSX.utils.json_to_sheet(services.value)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Services')
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' })
+  saveAs(blob, 'service-data.xlsx')
+}
 </script>
 
 <style scoped>
+/* Table styles */
 th,
 td {
   text-align: left;
   padding: 10px;
 }
+
 table {
   width: 100%;
 }
+
 th {
   font-weight: bold;
 }
+
 th:nth-child(1),
 td:nth-child(1) {
   width: 30%;
 }
+
 th:nth-child(2),
 td:nth-child(2) {
   width: 40%;
 }
+
 th:nth-child(3),
 td:nth-child(3) {
   width: 30%;
